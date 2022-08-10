@@ -1,32 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
+import Cat from "./components/Cat";
+import { memo } from "react";
+
+const PureCat = memo(Cat, () => true);
 
 const App = () => {
-  const [val, set] = useState("");
-  const [phrase, setPhrase] = useState("example phrase");
-
-  const createPhrase = () => {
-    setPhrase(val);
-    set("");
-  };
-
-  useEffect(() => {
-    console.log(`typing "${val}"`);
-  }, [val]);
-
-  useEffect(() => {
-    console.log(`saved phrase: "${phrase}"`);
-  }, [phrase]);
-
+  const [cats, setCats] = useState(["Biscuit", "Jungle", "Outlaw"]);
   return (
     <>
-      <label>Favorite phrase:</label>
-      <input
-        value={val}
-        placeholder={phrase}
-        onChange={(e) => set(e.target.value)}
-      />
-      <button onClick={createPhrase}>send</button>
+      {cats.map((name, i) => (
+        <PureCat key={i} name={name} meow={name => console.log(`${name} has meowed`)}/>
+      ))}
+      <button onClick={() => setCats([...cats, prompt("Name a cat")])}>
+        Add a Cat
+      </button>
     </>
   );
 };
